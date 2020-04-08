@@ -45,28 +45,45 @@ async function searchMeal(e) {
   }
 }
 
-// Fetch meal by ID 
-async function getMealById(mealID){
-    const url =`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealID}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    console.log(data)
+// Fetch meal by ID
+async function getMealById(mealID) {
+  const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealID}`;
+  const res = await fetch(url);
+  const data = await res.json();
+
+  const meal = data.meals[0];
+
+  addMealToDom(meal);
+}
+
+// Add meal to DOM
+function addMealToDom(meal) {
+  const ingredients = [];
+
+  for (let i = 1; i <= 20; i++) {
+    if (meal[`strIngredient${i}`]) {
+      ingredients.push(
+        `${meal[`strIngredient${i}`]} - ${meal[`strMeasure${i}`]} `
+      );
+    } else {
+        break;
+    }
+  }
 }
 
 // Event listeners
 submit.addEventListener('submit', searchMeal);
 
-mealsEl.addEventListener('click',e=>{
-    const mealInfo = e.path.find(item=>{
-        if(item.classList){
-            return item.classList.contains('meal-info');
-
-        }else{
-            return false;
-        }
-    })
-    if(mealInfo){
-        const mealId = mealInfo.getAttribute('data-mealid');
-        getMealById(mealId)
+mealsEl.addEventListener('click', (e) => {
+  const mealInfo = e.path.find((item) => {
+    if (item.classList) {
+      return item.classList.contains('meal-info');
+    } else {
+      return false;
     }
-})
+  });
+  if (mealInfo) {
+    const mealId = mealInfo.getAttribute('data-mealid');
+    getMealById(mealId);
+  }
+});
