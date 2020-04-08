@@ -45,6 +45,14 @@ async function searchMeal(e) {
   }
 }
 
+// Fetch meal by ID 
+async function getMealById(mealID){
+    const url =`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealID}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    console.log(data)
+}
+
 // Event listeners
 submit.addEventListener('submit', searchMeal);
 
@@ -59,6 +67,6 @@ mealsEl.addEventListener('click',e=>{
     })
     if(mealInfo){
         const mealId = mealInfo.getAttribute('data-mealid');
-        console.log(mealId)
+        getMealById(mealId)
     }
 })
